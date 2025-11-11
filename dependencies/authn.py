@@ -9,7 +9,6 @@ load_dotenv()
 JWT_SECRET = os.getenv("JWT_SECRET_KEY")
 ALGORITHM = "HS256"
 
-# THIS REMOVES ALL FIELDS EXCEPT ACCESS TOKEN
 security = HTTPBearer(
     scheme_name="Bearer Token",
     description="Paste your JWT access token below",

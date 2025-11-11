@@ -14,7 +14,7 @@ def signup(
     name: Annotated[str, Form()],
     email: Annotated[EmailStr, Form()],
     password: Annotated[str, Form(min_length=8)],
-    phone: Annotated[str, Form()],
+    phone: Annotated[int, Form()],
     address: Annotated[str, Form()]
 ):
     if users_collection.find_one({"email": email}):

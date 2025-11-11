@@ -15,8 +15,8 @@
 #     # 2. Login
 #     r = requests.post(f"{BASE}/users/login", data={
 #         "email": "peter@example.com", "password": "password123"
-#     })
-#     token = r.json()["access_token"]
+#     })  
+#     token =c  b r.json()["access_token"]
 #     headers = {"Authorization": f"Bearer {token}"}
 #     print("Login: Success")
 

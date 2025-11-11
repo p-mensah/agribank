@@ -16,7 +16,7 @@ class TransferRequest(BaseModel):
     to_account_number: str
     amount: float
 
-# === RESPONSE MODELS (MISSING!) ===
+# === RESPONSE MODELS  ===
 class TransactionResponse(BaseModel):
     id: str
     type: TransactionType
