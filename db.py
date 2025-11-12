@@ -20,4 +20,9 @@ accounts_collection = db["accounts"]
 transactions_collection = db["transactions"]
 
 def get_db():
+    """Returns the database client.
+
+    Returns:
+        Db: The database client.
+    """
     return db
