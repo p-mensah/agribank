@@ -230,9 +230,21 @@ def record_transaction(
     balance_after: float,
     description: str = "",
 ) -> dict:
-    """
-    Centralised transaction recorder.
-    All arguments must be passed as keyword arguments for clarity.
+    """Creates and stores a new transaction record in the database.
+
+    This is a centralized function for recording all types of transactions to ensure
+    consistency. All arguments must be passed as keyword arguments for clarity.
+
+    Args:
+        account_id (str): The unique identifier of the account.
+        account_number (str): The public-facing account number.
+        trans_type (str): The type of transaction (e.g., DEPOSIT, WITHDRAWAL).
+        amount (float): The amount of the transaction.
+        balance_after (float): The account balance after the transaction.
+        description (str, optional): A description of the transaction. Defaults to "".
+
+    Returns:
+        dict: The newly created transaction record.
     """
     trans = {
         "_id": str(uuid.uuid4()),
@@ -258,6 +270,19 @@ def deposit(
     account_number: str,
     user=Depends(authenticated_user),
 ):
+    """Deposits a specified amount into an account.
+
+    Args:
+        req (TransactionCreate): The request body containing the deposit amount.
+        account_number (str): The account number to deposit into.
+        user (dict): The authenticated user's data.
+
+    Raises:
+        HTTPException: If the account is not found, not active, or is a fixed deposit account.
+
+    Returns:
+        dict: The transaction record for the deposit.
+    """
     acc = accounts_collection.find_one(
         {"account_number": account_number, "user_id": user["_id"]}
     )
@@ -294,6 +319,20 @@ def withdraw(
     account_number: str,
     user=Depends(authenticated_user),
 ):
+    """Withdraws a specified amount from an account.
+
+    Args:
+        req (TransactionCreate): The request body containing the withdrawal amount.
+        account_number (str): The account number to withdraw from.
+        user (dict): The authenticated user's data.
+
+    Raises:
+        HTTPException: If the account is not found, not active, or if withdrawal
+                       violates account-specific rules (e.g., minimum balance).
+
+    Returns:
+        dict: The transaction record for the withdrawal.
+    """
     acc = accounts_collection.find_one(
         {"account_number": account_number, "user_id": user["_id"]}
     )
@@ -340,6 +379,20 @@ def transfer(
     from_account: str,
     user=Depends(authenticated_user),
 ):
+    """Transfers a specified amount from one account to another.
+
+    Args:
+        req (TransferRequest): The request body containing transfer details.
+        from_account (str): The account number to transfer from.
+        user (dict): The authenticated user's data.
+
+    Raises:
+        HTTPException: If either account is not found, not active, or if the
+                       source account has insufficient funds.
+
+    Returns:
+        dict: A message indicating the transfer was successful.
+    """
     from_acc = accounts_collection.find_one(
         {"account_number": from_account, "user_id": user["_id"]}
     )
@@ -395,6 +448,20 @@ def get_transaction_history(
     skip: int = 0,
     limit: int = 50,
 ):
+    """Retrieves the transaction history for a specific account.
+
+    Args:
+        account_number (str): The account number to retrieve history for.
+        user (dict): The authenticated user's data.
+        skip (int, optional): The number of transactions to skip. Defaults to 0.
+        limit (int, optional): The maximum number of transactions to return. Defaults to 50.
+
+    Raises:
+        HTTPException: If the account is not found or the user does not have access.
+
+    Returns:
+        list: A list of transaction records.
+    """
     # 1. Find account by public number + ownership
     account = accounts_collection.find_one(
         {"account_number": account_number, "user_id": user["_id"]}

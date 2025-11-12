@@ -17,6 +17,21 @@ def signup(
     phone: Annotated[int, Form()],
     address: Annotated[str, Form()]
 ):
+    """Creates a new user account.
+
+    Args:
+        name (str): The user's full name.
+        email (EmailStr): The user's email address.
+        password (str): The user's password (at least 8 characters).
+        phone (int): The user's phone number.
+        address (str): The user's physical address.
+
+    Raises:
+        HTTPException: If the email is already registered.
+
+    Returns:
+        dict: A message indicating successful user creation.
+    """
     if users_collection.find_one({"email": email}):
         raise HTTPException(
             status_code=409,
@@ -43,6 +58,18 @@ def login(
     email: Annotated[EmailStr, Form()],
     password: Annotated[str, Form()]
 ):
+    """Authenticates a user and returns an access token.
+
+    Args:
+        email (EmailStr): The user's email address.
+        password (str): The user's password.
+
+    Raises:
+        HTTPException: If the email or password is invalid.
+
+    Returns:
+        dict: A dictionary containing the access token and token type.
+    """
     user = users_collection.find_one({"email": email})
     if not user or not bcrypt.checkpw(password.encode(), user["password_hash"].encode()):
         raise HTTPException(
@@ -55,4 +82,12 @@ def login(
 
 @router.get("/me")
 def me(current_user=Depends(authenticated_user)):
+    """Retrieves the authenticated user's profile.
+
+    Args:
+        current_user (dict): The authenticated user's data, injected by Depends(authenticated_user).
+
+    Returns:
+        dict: The user's profile information with the '_id' field replaced by 'id'.
+    """
     return replace_mongo_id(current_user)
