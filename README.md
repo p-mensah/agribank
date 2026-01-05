@@ -10,7 +10,7 @@ AgricBank is a leading financial institution committed to advancing agricultural
 
 ## 🔗 Links
 
-- **Live Demo**: https://bank-account-management-system-p4m4.onrender.com/login
+- **Live Demo**: https://bank-account-management-system-p4m4.onrender.com/
 - **API Documentation (Swagger)**: https://agribank.onrender.com/docs#/
 
 ## ✨ Features
