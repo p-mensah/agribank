@@ -312,8 +312,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 For support and inquiries:
-- Email: support@agribank.com
-- Phone: +233 30 123 4567
+- Email: ing.mensah@outlook.com
+- Phone: +233244824462
 - Address: Accra, Ghana
 
 ## 🔄 API Version
